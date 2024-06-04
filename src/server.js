@@ -3,6 +3,7 @@ import express from "express";
 import createError from "http-errors";
 import connectMongoDB from "./db/connectDB.js";
 import authRouter from "./routes/authRouter.js";
+import messageRouter from "./routes/messageRouter.js";
 const app = express();
 
 dotenv.config();
@@ -10,11 +11,12 @@ const port = process.env.PORT || 5000;
 
 app.use(express.json());
 
-app.use("/api/auth", authRouter);
-
 app.get("/", (req, res) => {
   res.send("Hello form the chatbot application.");
 });
+
+app.use("/api/auth", authRouter);
+app.use("/api/messages", messageRouter);
 
 app.use((req, res, next) => {
   next(createError(404, "Routes not found!"));
