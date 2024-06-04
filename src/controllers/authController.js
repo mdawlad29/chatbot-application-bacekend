@@ -41,12 +41,12 @@ export const signupUser = async (req, res) => {
 
   if (newUser) {
     generateTokenSetCookie(newUser._id, res);
-    await UserModel.create(newUser);
+    const createdUser = await UserModel.create(newUser);
 
     return successResponse(res, {
       statusCode: 201,
       message: "User created successful",
-      payload: newUser,
+      payload: createdUser,
     });
   } else {
     return errorResponse(res, {
@@ -68,12 +68,17 @@ export const loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
     const user = await UserModel.findOne({ username });
-    const isPasswordIncorrect = await bcryptjs.compare(
-      password,
-      user?.username || ""
-    );
 
-    if (!user || !isPasswordIncorrect) {
+    if (!user) {
+      return errorResponse(res, {
+        statusCode: 400,
+        message: "Invalid username or password",
+      });
+    }
+
+    const isPasswordCorrect = await bcryptjs.compare(password, user.password);
+
+    if (!isPasswordCorrect) {
       return errorResponse(res, {
         statusCode: 400,
         message: "Invalid username or password",
@@ -95,6 +100,18 @@ export const loginUser = async (req, res) => {
   }
 };
 
-export const logoutUser = (req, res) => {
-  res.send("logout  router");
+export const logoutUser = async (req, res) => {
+  try {
+    res.cookie("jwt", "", { maxAge: 0 });
+    return successResponse(res, {
+      statusCode: 200,
+      message: "User logout successful",
+      payload: null,
+    });
+  } catch (error) {
+    return errorResponse(res, {
+      statusCode: 500,
+      message: "Internal server error" || error.message,
+    });
+  }
 };
