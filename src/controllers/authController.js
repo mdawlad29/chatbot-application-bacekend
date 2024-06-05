@@ -58,8 +58,8 @@ export const signupUser = async (req, res) => {
   try {
   } catch (error) {
     return errorResponse(res, {
-      statusCode: 500,
-      message: "Internal server error" || error.message,
+      statusCode: 400,
+      message: error.message,
     });
   }
 };
@@ -94,8 +94,8 @@ export const loginUser = async (req, res) => {
     });
   } catch (error) {
     return errorResponse(res, {
-      statusCode: 500,
-      message: "Internal server error" || error.message,
+      statusCode: 400,
+      message: error.message,
     });
   }
 };
@@ -110,8 +110,8 @@ export const logoutUser = async (req, res) => {
     });
   } catch (error) {
     return errorResponse(res, {
-      statusCode: 500,
-      message: "Internal server error" || error.message,
+      statusCode: 400,
+      message: error.message,
     });
   }
 };

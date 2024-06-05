@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-conversationSchema;
 
 const conversationSchema = new mongoose.Schema(
   {
@@ -9,7 +8,7 @@ const conversationSchema = new mongoose.Schema(
         ref: "users",
       },
     ],
-    message: [
+    messages: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Message",
@@ -17,9 +16,8 @@ const conversationSchema = new mongoose.Schema(
       },
     ],
   },
-  { timeStamps: true }
+  { timestamps: true }
 );
 
-const conversationModel = mongoose.model("Conversation", conversationSchema);
-
-export default conversationModel;
+const ConversationModel = mongoose.model("Conversation", conversationSchema);
+export default ConversationModel;
